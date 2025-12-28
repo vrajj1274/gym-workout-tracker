@@ -1,0 +1,24 @@
+const express = require('express');
+const router = express.Router();
+const MuscleGroup = require('../models/MuscleGroup');
+const auth = require('../middleware/auth');
+
+// Get all muscle groups
+router.get('/', async (req, res) => {
+  const groups = await MuscleGroup.find().sort('name');
+  res.json(groups);
+});
+
+// Admin / seed only: create muscle groups
+router.post('/', auth, async (req, res) => {
+  const { name, slug, description } = req.body;
+  try {
+    const mg = new MuscleGroup({ name, slug, description });
+    await mg.save();
+    res.json(mg);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+module.exports = router;
