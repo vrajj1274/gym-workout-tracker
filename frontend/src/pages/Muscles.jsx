@@ -19,14 +19,18 @@ export default function Muscles() {
   const [error, setError] = useState(null)
 
   useEffect(() => { 
+    console.log('🔄 Fetching muscle groups...')
     api.getMuscles()
       .then(g => {
+        console.log('✅ Received muscle groups:', g)
         setGroups(g || [])
         setLoading(false)
+        setError(null)
       })
       .catch(err => {
-        console.error('Failed to load muscle groups:', err)
-        setError('Failed to load muscle groups. Please try again.')
+        console.error('❌ Failed to load muscle groups:', err)
+        const errorMessage = err.response?.data?.error || err.message || 'Failed to load muscle groups'
+        setError(`Error: ${errorMessage}. Please check your internet connection and try again.`)
         setLoading(false)
       })
   }, [])
