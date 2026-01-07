@@ -16,12 +16,19 @@ const muscleEmojis = {
 export default function Muscles() {
   const [groups, setGroups] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => { 
-    api.getMuscles().then(g => {
-      setGroups(g)
-      setLoading(false)
-    })
+    api.getMuscles()
+      .then(g => {
+        setGroups(g || [])
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error('Failed to load muscle groups:', err)
+        setError('Failed to load muscle groups. Please try again.')
+        setLoading(false)
+      })
   }, [])
 
   if (loading) {
@@ -29,6 +36,23 @@ export default function Muscles() {
       <div className="text-center mt-8">
         <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-indigo-500 border-t-transparent"></div>
         <p className="mt-4 text-gray-400">Loading muscle groups...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-6">
+        <div className="text-center p-8 bg-red-900/50 border-2 border-red-700 rounded-lg">
+          <span className="text-4xl mb-4 block">⚠️</span>
+          <p className="text-xl font-semibold mb-2">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 bg-indigo-600 px-6 py-3 rounded-lg hover:bg-indigo-700"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     )
   }
