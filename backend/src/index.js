@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
     timestamp: new Date().toISOString(),
     endpoints: {
       auth: '/api/auth',
-      muscles: '/api/muscles',
+      musclegroups: '/api/musclegroups',
       exercises: '/api/exercises',
       sessions: '/api/sessions'
     }
@@ -58,7 +58,7 @@ app.get('/', (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/muscles', muscleRoutes);
+app.use('/api/musclegroups', muscleRoutes); // Changed from /api/muscles to /api/musclegroups
 app.use('/api/exercises', exerciseRoutes);
 app.use('/api/sessions', sessionRoutes);
 
